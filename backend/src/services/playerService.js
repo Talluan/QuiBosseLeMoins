@@ -1,9 +1,11 @@
-import { getPuuidUrl } from "../utils/urls.js"
+import { getPuuidUrl, getLolAccountUrl } from "../utils/urls.js"
 import Player from "../models/Player.js";
 import fetch from 'node-fetch';
 import Logger from "../utils/Logger.js";
-import { UnvalidParam } from "../utils/Error.js";
+import { DataNotFound, UnvalidParam } from "../utils/Error.js";
 import { where } from "sequelize";
+
+// Requêtes en base
 
 const fetchPlayers = async () => {
     try {
@@ -25,17 +27,6 @@ const fetchPlayerByPuuid = async (puuid) => {
     }
 };
 
-const fetchAccountData = async (gamerTag, tagLine) => {
-    const url = getPuuidUrl(gamerTag, tagLine);
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error(error);
-    }
-}
-
 const existPlayer = async (gamerTag, tagLine) => {
     try {
         const player = await Player.findOne({ where: {gameName: gamerTag, tagLine: tagLine}});
@@ -49,10 +40,6 @@ const existPlayer = async (gamerTag, tagLine) => {
     }
 };
 
-const mapPlayer = (data) => {
-
-
-};
 
 const savePlayer = async (player) => {
     try {
@@ -61,17 +48,77 @@ const savePlayer = async (player) => {
         }
         const newPlayer = Player.build(player);
         await newPlayer.save();
-        Logger.info(`Player ${player.gamerTag} saved to the database`);
+        Logger.info(`Player ${player.gameName} saved to the database`);
     }
     catch (error) {
         Logger.error(error);
     }
 };
 
+const updatePlayer = async (player) => {
+    try {
+        if (!player) {
+            throw new UnvalidParam("playerService", "player");
+        }
+        const updatedPlayer = await Player.update(player, { where: { puuid: player.puuid } });
+
+        Logger.info(`Player ${player.gameName} updated in the database`);
+        return updatedPlayer;
+    }
+    catch (error) {
+        Logger.error(error);
+    }
+
+}
+
+// Requêtes API
+
+const fetchAccountData = async (gamerTag, tagLine) => {
+    const url = getPuuidUrl(gamerTag, tagLine);
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.status && data.status.status_code) {
+            throw new DataNotFound("playerService", `${gamerTag}#${tagLine}`);
+        }
+        return data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const fetchPlayerData = async (puuid) => {
+    const url = getLolAccountUrl(puuid);
+    try {
+    const response = await fetch(url);
+        const data = await response.json();
+        if (data.status && data.status.status_code) {
+            throw new DataNotFound("playerService", `${puuid}`);
+        }
+        return data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const parseData = (accountData, gameData) => {
+    const finalData = {
+        puuid: accountData.puuid,
+        gameName: accountData.gameName,
+        tagLine: accountData.tagLine,
+        summonerLevel: gameData.summonerLevel
+    }
+    return finalData;
+};
+
+
 export {
     fetchAccountData,
     fetchPlayerByPuuid,
+    fetchPlayerData,
     fetchPlayers,
     savePlayer,
-    existPlayer
+    existPlayer,
+    updatePlayer,
+    parseData
 }
