@@ -64,6 +64,11 @@ router.get("/", async (req, res, next) => {
  *         in: formData
  *         required: true
  *         type: string
+ *     responses:
+ *       200:
+ *         description: Return player account data
+ *       404:
+ *         description: Player not found  
  */
 router.get("/account/:gamerTag/:tagLine", async (req, res, next) => {
     try {
