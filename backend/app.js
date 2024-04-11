@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import db from "./src/db/db.js";
 import playerRoutes from "./src/routes/playerRoutes.js";
 import { errorHandler } from './src/middleware/errorHandler.js';
-import bodyParser from 'body-parser';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 // Load environment variables
 dotenv.config();
@@ -16,6 +17,24 @@ await db.testConnection();
 const app = express()
 const port = 3000
 app.use(express.json());
+
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Qui bosse le moins',
+      version: '1.0.0',
+    },
+  },
+  apis: ['./src/routes/*.js'],
+};
+
+const specs = swaggerJSDoc(options);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+
+
 
 // Routes
 app.use('/players', playerRoutes);
