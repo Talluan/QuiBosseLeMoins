@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from "dotenv";
 import db from "./src/db/db.js";
 import playerRoutes from "./src/routes/playerRoutes.js";
+import matchRoutes from "./src/routes/matchRoutes.js";
 import { errorHandler } from './src/middleware/errorHandler.js';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
@@ -38,6 +39,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // Routes
 app.use('/players', playerRoutes);
+app.use('/matches', matchRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World!')

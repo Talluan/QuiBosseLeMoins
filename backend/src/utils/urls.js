@@ -29,8 +29,14 @@ const getMatchHistoryUrl = (puuid) => {
     return `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=20&api_key=${apiKey}`;
 };
 
+const getMatchUrl = (matchId) => {
+    const apiKey = getApiKey();
+    return `https://europe.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${apiKey}`;
+}
+
 export {
     getPuuidUrl,
     getLolAccountUrl,
-    getMatchHistoryUrl
+    getMatchHistoryUrl,
+    getMatchUrl
 }

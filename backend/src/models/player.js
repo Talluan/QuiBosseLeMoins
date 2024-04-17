@@ -25,7 +25,4 @@ const Player =  db.define('player', {
 
 })
 
-db.sync();
-
-
 export default Player;

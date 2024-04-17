@@ -36,6 +36,17 @@ const fetchPlayerByPuuid = async (puuid) => {
     }
 };
 
+const existPlayerByPuuid = async (puuid) => {
+    try {
+        const player = await Player.findOne({ where: {puuid: puuid}});
+        return player? true : false;
+    }
+    catch (error) {
+        Logger.error(error);
+        throw error;
+    }
+};
+
 const existPlayer = async (gamerTag, tagLine) => {
     try {
         const player = await Player.findOne({ where: {gameName: gamerTag, tagLine: tagLine}});
@@ -148,5 +159,6 @@ export {
     savePlayer,
     existPlayer,
     updatePlayer,
-    parseData
+    parseData,
+    existPlayerByPuuid
 }
