@@ -35,7 +35,7 @@
  */
 
 import express from "express";
-import { getAccountData, getPlayers, getHistory, getPlayer } from "../controllers/playerController.js";
+import { getAccountData, getPlayers, getHistory, getPlayer, updatePlayerByGamerTag } from "../controllers/playerController.js";
 
 const router = express.Router();
 
@@ -119,6 +119,42 @@ router.get("/:puuid", async (req, res, next) => {
     try {
         const result = await getPlayer(req, res); 
         res.send(result); 
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /players/{gamerTag}/{tagLine}/{firstName}:
+ *   put:
+ *     summary: Ajouter un prénom à un joueur
+ *     description: Ajoute un prénom à un joueur en fonction de son gamerTag et de son tagLine
+ *     tags: [Players]
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: gamerTag
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: tagLine
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: firstName
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Return player account data
+ *       404:
+ *         description: Player not found  
+ */
+router.put("/:gamerTag/:tagLine/:firstName", async (req, res, next) => {
+    try {
+        res.send(await updatePlayerByGamerTag(req, res));
     } catch (error) {
         next(error);
     }

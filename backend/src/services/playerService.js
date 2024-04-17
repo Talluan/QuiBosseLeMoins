@@ -88,7 +88,23 @@ const updatePlayer = async (player) => {
         Logger.error(error);
         throw error;
     }
+}
 
+const updateFirstName = async (gamerTag, tagLine, firstName) => {
+    try {
+        const player = await Player.findOne({ where: { gameName: gamerTag, tagLine: tagLine } });
+        if (!player) {
+            throw new DataNotFound("playerService", `${gamerTag}#${tagLine}`);
+        }
+        player.firstName = firstName;
+        await player.save();
+        Logger.info(`Player ${gamerTag}#${tagLine} updated in the database`);
+        return player;
+    }
+    catch (error) {
+        Logger.error(error);
+        throw error;
+    }
 }
 
 // Requêtes API
@@ -160,5 +176,6 @@ export {
     existPlayer,
     updatePlayer,
     parseData,
-    existPlayerByPuuid
+    existPlayerByPuuid,
+    updateFirstName
 }

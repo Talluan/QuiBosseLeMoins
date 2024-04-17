@@ -1,4 +1,4 @@
-import { fetchAccountData, fetchPlayers, fetchPlayerData, savePlayer, existPlayer, parseData, updatePlayer, fetchHistory, fetchPlayer } from "../services/playerService.js";
+import { fetchAccountData, fetchPlayers, fetchPlayerData, savePlayer, existPlayer, parseData, updatePlayer, fetchHistory, fetchPlayer, updateFirstName } from "../services/playerService.js";
 import Logger from "../utils/Logger.js";
 
 const getAccountData = async (req, res) => {
@@ -41,6 +41,17 @@ const getPlayer = async (req, res) => {
     return player;
 };
 
+const updatePlayerByGamerTag = async (req, res) => {
+    const { gamerTag, tagLine, firstName } = req.params;
+    try {
+        const player = await updateFirstName(gamerTag, tagLine, firstName);
+        return player;
+    } catch (error) {
+        Logger.error(error);
+        throw error;
+    }
+}
+
 const getHistory = async (req, res) => {
     const { gamerTag, tagLine } = req.params;
     try {
@@ -60,5 +71,6 @@ export {
     getAccountData,
     getPlayers,
     getHistory,
-    getPlayer
+    getPlayer,
+    updatePlayerByGamerTag
 }
