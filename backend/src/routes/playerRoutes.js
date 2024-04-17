@@ -59,7 +59,7 @@ router.get("/", async (req, res, next) => {
 /**
  * @swagger
  *
- * /players/account/{gamerTag}/{tagLine}:
+ * /players/{gamerTag}/{tagLine}:
  *   get:
  *     produces:
  *       - application/json
@@ -78,7 +78,7 @@ router.get("/", async (req, res, next) => {
  *       404:
  *         description: Player not found  
  */
-router.get("/account/:gamerTag/:tagLine", async (req, res, next) => {
+router.get("/:gamerTag/:tagLine", async (req, res, next) => {
     try {
         const result = await getAccountData(req, res); 
         res.send(result); 
