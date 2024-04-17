@@ -30,13 +30,11 @@ const fetchPlayerByPuuid = async (puuid) => {
 const existPlayer = async (gamerTag, tagLine) => {
     try {
         const player = await Player.findOne({ where: {gameName: gamerTag, tagLine: tagLine}});
-        if (player) {
-            return true;
-        }
-        return false;
+        return (player);
     }
     catch (error) {
         Logger.error(error);
+        throw error;
     }
 };
 
@@ -52,6 +50,7 @@ const savePlayer = async (player) => {
     }
     catch (error) {
         Logger.error(error);
+        throw error;
     }
 };
 
@@ -67,6 +66,7 @@ const updatePlayer = async (player) => {
     }
     catch (error) {
         Logger.error(error);
+        throw error;
     }
 
 }
@@ -78,11 +78,13 @@ const fetchAccountData = async (gamerTag, tagLine) => {
     try {
         const response = await fetch(url);
         const data = await response.json();
-        if (data.status && data.status.status_code) {
+        console.log(data);
+        if (data?.status?.status_code) {
             throw new DataNotFound("playerService", `${gamerTag}#${tagLine}`);
         }
         return data;
     } catch (error) {
+        Logger.error(error);
         throw error;
     }
 }
@@ -92,7 +94,7 @@ const fetchPlayerData = async (puuid) => {
     try {
     const response = await fetch(url);
         const data = await response.json();
-        if (data.status && data.status.status_code) {
+        if (data?.status?.status_code) {
             throw new DataNotFound("playerService", `${puuid}`);
         }
         return data;

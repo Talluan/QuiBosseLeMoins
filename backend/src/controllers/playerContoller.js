@@ -1,4 +1,5 @@
 import { fetchAccountData, fetchPlayers, fetchPlayerData, savePlayer, existPlayer, parseData, updatePlayer } from "../services/playerService.js";
+import Logger from "../utils/Logger.js";
 
 const getAccountData = async (req, res) => {
     try {
@@ -13,15 +14,15 @@ const getAccountData = async (req, res) => {
         const exist = await existPlayer(gamerTag, tagLine); 
 
         // enregistrement en base
-        let savedPlayer;
         if (!exist) {
-            savedPlayer = await savePlayer(finalData);
+            await savePlayer(finalData);
         } else {
-            savedPlayer = await updatePlayer(finalData);
+            await updatePlayer(finalData);
         }
 
         return finalData;
     } catch (error) {
+        Logger.error(error);
         throw error;
     }
     
