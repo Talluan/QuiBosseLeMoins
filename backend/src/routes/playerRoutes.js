@@ -1,3 +1,39 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Player:
+ *       type: object
+ *       required:
+ *         - puuid
+ *       properties:
+ *         puuid:
+ *           type: string
+ *           description: The player's puuid
+ *         firstName:
+ *           type: string
+ *           description: The player's first name
+ *         gameName:
+ *           type: string
+ *           description: The player's game name
+ *         tagLine:
+ *           type: string
+ *           description: The player's tag line
+ *         summonerLevel:
+ *           type: int
+ *           description: The player's summoner level
+ *         createdAt:
+ *           type: string
+ *           format: date
+ *           description: The date the player was created
+ *       example:
+ *        puuid: "pHIYo4mJ8u7o1oO7R8T0DOMAkijLPMozvWBFfgt-o0cwRml8uak6uEzFAqvGH6JApdFb9-Xy8i22yQ"
+ *        firstName: Jean
+ *        gameName: "Pirukos"
+ *        tagLine: "EUW"
+ *        summonerLevel: 142
+ */
+
 import express from "express";
 import { getAccountData, getPlayers, getHistory, getPlayer } from "../controllers/playerController.js";
 
@@ -6,47 +42,17 @@ const router = express.Router();
 
 /**
  * @swagger
+ * tags:
+ *   name: Players
+ *   description: "API pour les joueurs"
  * /players:
  *   get:
  *     summary: Obtenir tous les joueurs
  *     description: Retourne toutes les informations sur les joueurs disponibles.
- *     produces:
- *       - application/json
+ *     tags: [Players]
  *     responses:
  *       200:
  *         description: Succès. Retourne un tableau de joueurs.
- *         schema:
- *           type: array
- *           items:
- *             $ref: '#/definitions/Player'
- * definitions:
- *   Player:
- *     type: object
- *     properties:
- *       puuid:
- *         type: string
- *       firstName:
- *         type: string
- *       gameName:
- *         type: string
- *       tagLine:
- *         type: string
- *       summonerLevel:
- *         type: string
- *       createdAt:
- *         type: string
- *         format: date-time
- *       updatedAt:
- *         type: string
- *         format: date-time
- *     example:
- *       puuid: "fknelzkbu"
- *       firstName: null
- *       gameName: "test"
- *       tagLine: "EUW"
- *       summonerLevel: null
- *       createdAt: "2024-04-11T14:31:52.456Z"
- *       updatedAt: "2024-04-11T14:31:52.456Z"
  */
 router.get("/", async (req, res, next) => {
     try {
@@ -58,18 +64,20 @@ router.get("/", async (req, res, next) => {
 
 /**
  * @swagger
- *
  * /players/{gamerTag}/{tagLine}:
  *   get:
+ *     summary: Obtenir les informations d'un joueur
+ *     description: Retourne les informations d'un joueur en fonction de son gamerTag et de son tagLine.
+ *     tags: [Players]
  *     produces:
  *       - application/json
  *     parameters:
  *       - name: gamerTag
- *         in: formData
+ *         in: path
  *         required: true
  *         type: string
  *       - name: tagLine
- *         in: formData
+ *         in: path
  *         required: true
  *         type: string
  *     responses:
@@ -91,22 +99,22 @@ router.get("/:gamerTag/:tagLine", async (req, res, next) => {
  * @swagger
  * /players/{puuid}:
  *   get:
- *   summary: Obtenir un joueur
- *   description: Retourne les informations sur un joueur.
- *      produces:
- *        - application/json
- *      parameters:
- *        - name: puuid
- *          in: formData
- *          required: true
- *          type: string
- *      responses:
- *          200:
- *             description: Succès. Retourne les informations sur un joueur.
- *          404:
- *             description: Joueur non trouvé
+ *     summary: Obtenir les informations d'un joueur
+ *     description: Retourne les informations d'un joueur en fonction de son puuid.
+ *     tags: [Players]
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: puuid
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Return player account data
+ *       404:
+ *         description: Player not found  
  */
-
 router.get("/:puuid", async (req, res, next) => {
     try {
         const result = await getPlayer(req, res); 
@@ -118,23 +126,25 @@ router.get("/:puuid", async (req, res, next) => {
 
 /**
  * @swagger
- *
  * /players/history/{gamerTag}/{tagLine}:
  *   get:
+ *     summary: Obtenir l'historique d'un joueur
+ *     description: Retourne l'historique d'un joueur à partir de son gamerTag et de son tagLine.
+ *     tags: [Players]
  *     produces:
  *       - application/json
  *     parameters:
  *       - name: gamerTag
- *         in: formData
+ *         in: path
  *         required: true
  *         type: string
  *       - name: tagLine
- *         in: formData
+ *         in: path
  *         required: true
  *         type: string
  *     responses:
  *       200:
- *         description: Return player games history data
+ *         description: Return player history data
  *       404:
  *         description: Player not found  
  */
