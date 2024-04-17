@@ -49,7 +49,11 @@ const router = express.Router();
  *       updatedAt: "2024-04-11T14:31:52.456Z"
  */
 router.get("/", async (req, res, next) => {
-    res.send(await getPlayers(req, res));
+    try {
+        res.send(await getPlayers(req, res));
+    } catch (error) {
+        next(error);
+    }
 });
 
 /**
@@ -68,9 +72,19 @@ router.get("/", async (req, res, next) => {
  *         in: formData
  *         required: true
  *         type: string
+ *     responses:
+ *       200:
+ *         description: Return player account data
+ *       404:
+ *         description: Player not found  
  */
 router.get("/account/:gamerTag/:tagLine", async (req, res, next) => {
-    res.send(await getAccountData(req, res));
+    try {
+        const result = await getAccountData(req, res); 
+        res.send(result); 
+    } catch (error) {
+        next(error);
+    }
 });
 
 
