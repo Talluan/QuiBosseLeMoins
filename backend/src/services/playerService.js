@@ -16,9 +16,9 @@ const fetchPlayers = async () => {
         Logger.error("Error getting players from the database");
     }
 };
-const fetchPlayer = async () => {
+const fetchPlayer = async (puuid) => {
     try {
-        const player = await Player.findOne();
+        const player = await Player.findOne({where: { puuid: puuid }});
         return player;
     }  
     catch {

@@ -13,6 +13,7 @@ const getAccountData = async (req, res) => {
         const finalData = parseData(accountData, lolAccountData);
         const exist = await existPlayer(gamerTag, tagLine); 
 
+
         // enregistrement en base
         if (!exist) {
             await savePlayer(finalData);
@@ -32,8 +33,11 @@ const getPlayers = async (req, res) => {
     const players = await fetchPlayers();
     return players;
 };
+
+
 const getPlayer = async (req, res) => {
-    const player = await fetchPlayer();
+    const { puuid } = req.params;
+    const player = await fetchPlayer(puuid);
     return player;
 };
 
@@ -49,6 +53,8 @@ const getHistory = async (req, res) => {
         throw error;
     }
 }
+
+
 
 export {
     getAccountData,
