@@ -1,5 +1,5 @@
 import express from "express";
-import { getAccountData, getPlayers, getHistory } from "../controllers/playerContoller.js";
+import { getAccountData, getPlayers, getHistory, getPlayer } from "../controllers/playerContoller.js";
 
 const router = express.Router();
 
@@ -81,6 +81,35 @@ router.get("/", async (req, res, next) => {
 router.get("/:gamerTag/:tagLine", async (req, res, next) => {
     try {
         const result = await getAccountData(req, res); 
+        res.send(result); 
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /players/{puuid}:
+ *   get:
+ *   summary: Obtenir un joueur
+ *   description: Retourne les informations sur un joueur.
+ *      produces:
+ *        - application/json
+ *      parameters:
+ *        - name: puuid
+ *          in: formData
+ *          required: true
+ *          type: string
+ *      responses:
+ *          200:
+ *             description: Succès. Retourne les informations sur un joueur.
+ *          404:
+ *             description: Joueur non trouvé
+ */
+
+router.get("/:puuid", async (req, res, next) => {
+    try {
+        const result = await getPlayer(req, res); 
         res.send(result); 
     } catch (error) {
         next(error);

@@ -16,6 +16,15 @@ const fetchPlayers = async () => {
         Logger.error("Error getting players from the database");
     }
 };
+const fetchPlayer = async () => {
+    try {
+        const player = await Player.findOne();
+        return player;
+    }  
+    catch {
+        Logger.error(`Error getting player from the database`);
+    }
+};
 
 const fetchPlayerByPuuid = async (puuid) => {
     try {
@@ -134,6 +143,7 @@ export {
     fetchPlayerByPuuid,
     fetchPlayerData,
     fetchPlayers,
+    fetchPlayer,
     fetchHistory,
     savePlayer,
     existPlayer,

@@ -1,4 +1,4 @@
-import { fetchAccountData, fetchPlayers, fetchPlayerData, savePlayer, existPlayer, parseData, updatePlayer, fetchHistory } from "../services/playerService.js";
+import { fetchAccountData, fetchPlayers, fetchPlayerData, savePlayer, existPlayer, parseData, updatePlayer, fetchHistory, fetchPlayer } from "../services/playerService.js";
 import Logger from "../utils/Logger.js";
 
 const getAccountData = async (req, res) => {
@@ -32,6 +32,10 @@ const getPlayers = async (req, res) => {
     const players = await fetchPlayers();
     return players;
 };
+const getPlayer = async (req, res) => {
+    const player = await fetchPlayer();
+    return player;
+};
 
 const getHistory = async (req, res) => {
     const { gamerTag, tagLine } = req.params;
@@ -49,5 +53,6 @@ const getHistory = async (req, res) => {
 export {
     getAccountData,
     getPlayers,
-    getHistory
+    getHistory,
+    getPlayer
 }
