@@ -1,5 +1,5 @@
 import express from "express";
-import { getAccountData, getPlayers } from "../controllers/playerContoller.js";
+import { getAccountData, getPlayers, getHistory } from "../controllers/playerContoller.js";
 
 const router = express.Router();
 
@@ -81,6 +81,37 @@ router.get("/", async (req, res, next) => {
 router.get("/:gamerTag/:tagLine", async (req, res, next) => {
     try {
         const result = await getAccountData(req, res); 
+        res.send(result); 
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ *
+ * /players/history/{gamerTag}/{tagLine}:
+ *   get:
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: gamerTag
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: tagLine
+ *         in: formData
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Return player games history data
+ *       404:
+ *         description: Player not found  
+ */
+router.get("/history/:gamerTag/:tagLine", async (req, res, next) => {
+    try {
+        const result = await getHistory(req, res); 
         res.send(result); 
     } catch (error) {
         next(error);

@@ -1,4 +1,4 @@
-import { getPuuidUrl, getLolAccountUrl } from "../utils/urls.js"
+import { getPuuidUrl, getLolAccountUrl, getMatchHistoryUrl } from "../utils/urls.js"
 import Player from "../models/Player.js";
 import fetch from 'node-fetch';
 import Logger from "../utils/Logger.js";
@@ -30,7 +30,7 @@ const fetchPlayerByPuuid = async (puuid) => {
 const existPlayer = async (gamerTag, tagLine) => {
     try {
         const player = await Player.findOne({ where: {gameName: gamerTag, tagLine: tagLine}});
-        return (player);
+        return player? true : false;
     }
     catch (error) {
         Logger.error(error);
@@ -103,6 +103,21 @@ const fetchPlayerData = async (puuid) => {
     }
 }
 
+const fetchHistory = async (puuid) => {
+    const url = getMatchHistoryUrl(puuid);
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data?.status?.status_code) {
+            throw new DataNotFound("playerService", `${puuid}`);
+        }
+        return data;
+    } catch (error) {
+        Logger.error(error);
+        throw error;
+    }
+}
+
 const parseData = (accountData, gameData) => {
     const finalData = {
         puuid: accountData.puuid,
@@ -119,6 +134,7 @@ export {
     fetchPlayerByPuuid,
     fetchPlayerData,
     fetchPlayers,
+    fetchHistory,
     savePlayer,
     existPlayer,
     updatePlayer,
