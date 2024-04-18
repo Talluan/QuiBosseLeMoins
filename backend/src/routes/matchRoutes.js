@@ -77,8 +77,28 @@ router.get('/:gameId', async (req, res, next) => {
     res.send(await getMatchById(req, res));
 });
 
+/**
+ * @swagger
+ * /matches/:
+ *   post:
+ *     summary: Enregistre un tableau de matches
+ *     description: Enregistre tous les matchs passés dans le body.
+ *     tags: [Matches]
+ *     parameters:
+ *       - in: body
+ *         required: true
+ *         description: The array of matches
+ *         name: games
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *           example: ["EUW1_6839921593", "EUW1_6839921594"]
+ *     responses:
+ *       200:
+ *         description: Succès. Retourne un tableau de matchs.
+ */
 router.post('/', async (req, res, next) => {
-    console.log("post " + req.body);
     res.send(await saveMatches(req, res));
 });
 
