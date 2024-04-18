@@ -81,6 +81,9 @@ const getMatchWithId = async (gameId) => {
 
 const saveMatch = async (match) => {
     console.log(match);
+    if(match.status.status_code == 404) {
+        return;
+    }
     if(await existMatch(match.metadata.matchId)) {
         Logger.info(`Match ${match.gameId} already exists in the database`);
         return;

@@ -12,41 +12,20 @@
                 <div class="divrank">
                     <table class="ranktable">
                         <tr>
-                            <th class="pos">Position</th>
                             <th class="invoc">Invocateur</th>
-                            <th class="name">Nom</th>
                             <th class="firstname">Prénom</th>
                             <th class="level">Niveau</th>
                             <th class="game_nb">Nombre de matchs</th>
                             <th class="lp">Points</th>
                         </tr>
-                        <tr>
-                            <td class="pos">1</td>
-                            <th class="invoc">Invocateur1</th>
-                            <th class="name">Nom1</th>
-                            <th class="firstname">Prénom1</th>
-                            <th class="level">165</th>
+                        <tr v-for="player in players">
+                            <th class="invoc">{{ player.gameName }}</th>
+                            <th class="firstname">{{ player.firstName }}</th>
+                            <th class="level">{{ player.summonerLevel }}</th>
                             <th class="game_nb">157</th>
                             <th class="lp">0 LP</th>
                         </tr>
-                        <tr>
-                            <td class="pos">2</td>
-                            <th class="invoc">Invocateur2</th>
-                            <th class="name">Nom2</th>
-                            <th class="firstname">Prénom2</th>
-                            <th class="level">272</th>
-                            <th class="game_nb">89</th>
-                            <th class="lp">94 LP</th>
-                        </tr>
-                        <tr>
-                            <td class="pos">3</td>
-                            <th class="invoc">Invocateur3</th>
-                            <th class="name">Nom3</th>
-                            <th class="firstname">Prénom3</th>
-                            <th class="level">35</th>
-                            <th class="game_nb">16</th>
-                            <th class="lp">587 LP</th>
-                        </tr>    
+
                     </table>
                     <p class="desc">Retrouve le classement des invocateurs R&I !</p>
                 </div>
@@ -54,6 +33,42 @@
         </div>
     </div>
 </template>
+
+<script setup>
+import { onMounted, ref } from 'vue';
+
+const baseUrl = 'http://localhost:3000';
+
+
+const playerGames = ref([]);
+const players = ref([])
+
+const fetchPlayers = async () => {
+    const response = await fetch(baseUrl + '/players');
+    players.value = await response.json();
+    console.log(players)
+}
+
+const fetchPlayersGames = async (player) => {
+    const matchesResponse = await fetch(baseUrl + '/matches/player' + player.puuid);
+    console.log(matchesResponse);
+    return await matchesResponse.json();
+}
+
+const fetchData = async () => {
+    await fetchPlayers();
+    for (const player in players.value) {
+        let matches = await fetchPlayersGames(player);
+        playerGames.value.push(matches);
+    }
+    console.log(playerGames);
+}
+
+ fetchData();
+
+
+</script>
+
 <style scoped>
 .main {
     background-image: url("../assets/rammus.jpg");

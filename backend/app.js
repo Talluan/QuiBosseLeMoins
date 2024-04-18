@@ -6,6 +6,7 @@ import matchRoutes from "./src/routes/matchRoutes.js";
 import { errorHandler } from './src/middleware/errorHandler.js';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import cors from 'cors';
 
 // Load environment variables
 dotenv.config();
@@ -16,6 +17,7 @@ await db.testConnection();
 
 // Initialisation de l'application express
 const app = express()
+app.use(cors());
 const port = 3000
 app.use(express.json());
 
