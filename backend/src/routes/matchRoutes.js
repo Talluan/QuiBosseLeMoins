@@ -110,7 +110,7 @@ router.post('/', async (req, res, next) => {
  *     description: Retourne toutes les informations sur les matchs disponibles.
  *     tags: [Matches]
  *     parameters:
- *       - name: puiid
+ *       - name: puuid
  *         in: path
  *         required: true
  *         description: L'identifiant du joueur.

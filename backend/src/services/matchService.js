@@ -81,7 +81,7 @@ const getMatchWithId = async (gameId) => {
 
 const saveMatch = async (match) => {
     console.log(match);
-    if(match.status.status_code == 404) {
+    if(match.status?.status_code === 404) {
         return;
     }
     if(await existMatch(match.metadata.matchId)) {
