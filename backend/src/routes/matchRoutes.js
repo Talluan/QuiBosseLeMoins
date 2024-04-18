@@ -102,7 +102,23 @@ router.post('/', async (req, res, next) => {
     res.send(await saveMatches(req, res));
 });
 
-
+/**
+ * @swagger
+ * /matches/player/{puuid}:
+ *   get:
+ *     summary: Obtenir tous les matchs enregistrés
+ *     description: Retourne toutes les informations sur les matchs disponibles.
+ *     tags: [Matches]
+ *     parameters:
+ *       - name: puiid
+ *         in: path
+ *         required: true
+ *         description: L'identifiant du joueur.
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Succès. Retourne un tableau de matchs.
+ */
 router.get('/player/:puuid', async (req, res, next) => {
     res.send(await getMatchesByPlayer(req, res));
 });
