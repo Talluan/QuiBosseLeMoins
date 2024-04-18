@@ -104,6 +104,18 @@ const existMatch = async (gameId) => {
     }
 }
 
+const getAllMatchesByPlayer = async (puuid) => {
+    try {
+        const player = await Player.findOne({ where: { puuid: puuid } });
+        const playerMatches = await playerMatch.findAll({ where: { puuid: puuid } });
+        return playerMatches;
+    }
+    catch (error) {
+        Logger.error(error);
+        throw error;
+    }
+};
+
 // Requêtes API
 
 const fetchMatch = async (gameId) => {
@@ -152,5 +164,6 @@ export {
     existMatch, 
     parseMatch,
     getMatches,
-    getMatchWithId
+    getMatchWithId,
+    getAllMatchesByPlayer
 }

@@ -1,4 +1,4 @@
-import { getMatch, fetchMatch, existMatch, saveMatch, parseMatch, getMatches, getMatchWithId } from "../services/matchService.js";
+import { getMatch, fetchMatch, existMatch, saveMatch, parseMatch, getMatches, getMatchWithId, getAllMatchesByPlayer} from "../services/matchService.js";
 import Logger from "../utils/Logger.js";
 
 const getMatchById = async(req, res) => {
@@ -37,11 +37,23 @@ const saveMatches = async (req, res) => {
         Logger.error(error);
         throw error;
     }
+}
 
+
+const getMatchesByPlayer = async (req, res) => {
+    const { puuid } = req.params;
+    try {
+        const matches = await getAllMatchesByPlayer(puuid);
+        return matches;
+    } catch (error) {
+        Logger.error(error);
+        throw error;
+    }
 }
 
 export {
     getMatchById,
     getAllMatches,
-    saveMatches
+    saveMatches,
+    getMatchesByPlayer
 }
