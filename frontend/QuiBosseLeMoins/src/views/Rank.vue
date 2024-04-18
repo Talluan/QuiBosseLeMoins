@@ -3,27 +3,26 @@
         <div class="home">
             <h1 class="title">Classement général</h1>
             <div class="rank">
-                <select name="filter" id="filter">
-                    <option value="">Choisir un filtre</option>
-                    <option value="level">Nivau</option>
-                    <option value="game">Nombre de matchs</option>
-                    <option value="test">none</option>
+                <select name="filter" id="filter" v-model="selected" @change="chooseOrder()">
+                    <option value="none">Choisir un filtre</option>
+                    <option value="level">Niveau</option>
+                    <option value="matches">Nombre de matchs</option>
                 </select>
                 <div class="divrank">
                     <table class="ranktable">
                         <tr>
+                            <th class="pos">Position </th>
                             <th class="invoc">Invocateur</th>
                             <th class="firstname">Prénom</th>
                             <th class="level">Niveau</th>
-                            <th class="game_nb">Nombre de matchs</th>
-                            <th class="lp">Points</th>
+                            <th class="game_nb">Nombre de matchs récents</th>
                         </tr>
-                        <tr v-for="player in players">
+                        <tr v-for="(player, index) in players">
+                            <th class="pos"> {{ index+1 }}</th>
                             <th class="invoc">{{ player.gameName }}</th>
                             <th class="firstname">{{ player.firstName }}</th>
                             <th class="level">{{ player.summonerLevel }}</th>
-                            <th class="game_nb">157</th>
-                            <th class="lp">0 LP</th>
+                            <th class="game_nb">{{ playerGames[index].length }}</th>
                         </tr>
 
                     </table>
@@ -35,33 +34,69 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 
 const baseUrl = 'http://localhost:3000';
 
-
+const selected = ref("");
 const playerGames = ref([]);
-const players = ref([])
+const players = ref([]);
 
 const fetchPlayers = async () => {
     const response = await fetch(baseUrl + '/players');
     players.value = await response.json();
-    console.log(players)
+    console.log(players.value)
 }
 
 const fetchPlayersGames = async (player) => {
-    const matchesResponse = await fetch(baseUrl + '/matches/player' + player.puuid);
-    console.log(matchesResponse);
+    const matchesResponse = await fetch(baseUrl + '/matches/player/' + player.puuid);
     return await matchesResponse.json();
 }
 
 const fetchData = async () => {
     await fetchPlayers();
     for (const player in players.value) {
-        let matches = await fetchPlayersGames(player);
+        let matches = await fetchPlayersGames(players.value[player]);
         playerGames.value.push(matches);
     }
-    console.log(playerGames);
+    console.log(playerGames.value)
+}
+
+const compareLevel = (a, b) => {
+    console.log("a et b");
+    console.log(a); 
+    console.log(b); 
+    console.log(a.summonerLevel < b.summonerLevel)
+    return a.summonerLevel < b.summonerLevel
+}
+
+const orderPlayerGames = () => {
+    const newOrder = [];
+    for (let index = 0; index < players.value.length; index++) {
+        const playeruuid = players.value[index].puuid;
+        for (let j = 0; j < playerGames.value.length; j++) {
+            const element = playerGames.value[j];
+            if (element.puuid == playeruuid) {
+                newOrder.push(element);
+            }
+        }
+    }
+    console.log(newOrder)
+    playerGames.value = newOrder;
+}
+
+const orderByLevel = () => {
+    const newOrder = players.value.sort(compareLevel);
+
+    console.log(newOrder)  
+    orderPlayerGames();
+}
+
+const chooseOrder = () => {
+    console.log("order changed" + selected.value)
+    if(selected.value == "level") {
+        orderByLevel();
+    }
 }
 
  fetchData();

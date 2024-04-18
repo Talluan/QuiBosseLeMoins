@@ -11,9 +11,11 @@ import cors from 'cors';
 // Load environment variables
 dotenv.config();
 
+
 // Test connection to the database
 const database =  db.getInstance();
 await db.testConnection();
+
 
 // Initialisation de l'application express
 const app = express()
@@ -21,6 +23,8 @@ app.use(cors());
 const port = 3000
 app.use(express.json());
 
+
+// Swagger
 const options = {
   definition: {
     openapi: '3.0.0',
@@ -33,7 +37,6 @@ const options = {
 };
 
 const specs = swaggerJSDoc(options);
-
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 
@@ -47,8 +50,8 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-// app.use(bodyParser.json());
 
+// Middleware pour gérer les erreurss
 app.use(errorHandler);
 
 
