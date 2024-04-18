@@ -62,7 +62,25 @@ const saveMatchForKnownPlayers = async (match, knownPlayers) => {
     }
 };
 
+const getMatchWithId = async (gameId) => {
+    try {
+        const exist = await existMatch(gameId);
+        let match;
+        if (exist) {
+            match = await getMatch(gameId);
+        } else {
+            const matchFetched = await fetchMatch(gameId);
+            match = await saveMatch(matchFetched);
+        }
+        return match;
+        } catch (error) {
+            Logger.error(error);
+            throw error;
+        }
+};
+
 const saveMatch = async (match) => {
+    console.log(match);
     if(await existMatch(match.metadata.matchId)) {
         Logger.info(`Match ${match.gameId} already exists in the database`);
         return;
@@ -133,5 +151,6 @@ export {
     fetchMatch,
     existMatch, 
     parseMatch,
-    getMatches
+    getMatches,
+    getMatchWithId
 }

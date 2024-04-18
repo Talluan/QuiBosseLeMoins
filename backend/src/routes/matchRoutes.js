@@ -33,7 +33,7 @@
  */
 
 import express from 'express';
-import { getAllMatches, getMatchById } from '../controllers/matchController.js';
+import { getAllMatches, getMatchById, saveMatches } from '../controllers/matchController.js';
 
 const router = express.Router();
 
@@ -75,6 +75,11 @@ router.get('/', async (req, res, next) => {
  */
 router.get('/:gameId', async (req, res, next) => {
     res.send(await getMatchById(req, res));
+});
+
+router.post('/', async (req, res, next) => {
+    console.log("post " + req.body);
+    res.send(await saveMatches(req, res));
 });
 
 export default router;
