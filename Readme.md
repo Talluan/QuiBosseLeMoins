@@ -4,15 +4,42 @@
 
     https://developer.riotgames.com/apis#summoner-v4/GET_getByPUUID
 
-
-
     https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/S167by73VYhpyIxIxS948C6iaUf7aQwm7rvkTAnYqQrAupaWNJCIQEAcjfy5NhxZ1cFoZlMAzmXM8g?api_key=RGAPI-714dc0bb-2e49-4c57-a8ed-82c63c259ee3
 
 
-    Avoir tous les matchs
-
+    Avoir tous les matchs :
     https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/S167by73VYhpyIxIxS948C6iaUf7aQwm7rvkTAnYqQrAupaWNJCIQEAcjfy5NhxZ1cFoZlMAzmXM8g/ids?start=0&count=20&api_key=RGAPI-714dc0bb-2e49-4c57-a8ed-82c63c259ee3
 
+## Générer une API KEY et la placer dans le .env
+
+https://developer.riotgames.com/
+
+
+## Exemple de fichier .env à la racine du folder /backend
+
+    DB_DIALECT =postgres
+    DB_NAME =QuiBosseLeMoins
+    DB_HOST =localhost
+    DB_USER =postgres
+    DB_PASSWORD =password
+
+    API_KEY=RGAPI-f2dd7c6b-702e-49c0-8f5d-14521b77278c
+
+## Run le projet après le fichier .env
+
+    Lancer le backend:
+        - cd backend
+        - npm i
+        - npm run dev
+
+    Lancer le frontend:
+        - cd frontend/QuiBosseLeMoins
+        - npm i
+        - npm run dev
+
+## Le swagger
+
+    http://localhost:3000/api-docs/
 
 ## User stories 
 
